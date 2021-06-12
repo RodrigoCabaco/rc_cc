@@ -1,6 +1,7 @@
 import split
 import process
 import filestream
+Write "Compiling... "
 #Usage -> rc_cc file.rcode --windows/--linux
 str plus >>"+"
 str quote >>""
@@ -2008,10 +2009,21 @@ replace:quote; with:double_quote; str:final_code_str;
 str(code+final_code_str)
 str(code+")
 str(code+part2)
+newln
 lsval(args[1])
-DeleteFile file:temp.cs;
-WriteToFile file:temp.cs; content:code;
+DeleteFile file:program.exe;
+WriteToFile file:program.exe; content:code;
+Write "-> Made Temp Files"
+newln
+Write "-> Compiling Temp Files "
+
 if str:args[1]!="--windows":
-    StartProcess file:/usr/bin/csc; args:temp.cs;
+    StartProcess file:/usr/bin/csc; args:program.exe;
 else:
-    StartProcess file:C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\Roslyn\csc.exe; args:temp.cs;
+    StartProcess file:C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\Roslyn\csc.exe; args:program.exe;
+
+DeleteFile file:program.exe;
+Write "$line_break$-> Deleted Temp Files"
+newln
+Write "Finished compiling -> program.exe"
+exit()
